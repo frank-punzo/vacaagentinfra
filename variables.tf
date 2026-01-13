@@ -78,3 +78,10 @@ variable "lambda_timeout" {
   type        = number
   default     = 30
 }
+
+# VPC Endpoint Configuration
+variable "create_secretsmanager_endpoint" {
+  description = "Create Secrets Manager VPC endpoint (set to false if endpoint already exists)"
+  type        = bool
+  default     = false  # Default to false since you already have one
+}

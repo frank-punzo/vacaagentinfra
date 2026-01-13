@@ -1,9 +1,11 @@
 # Lambda Layer for Python dependencies
 resource "aws_lambda_layer_version" "dependencies" {
+  count               = fileexists("lambda_layer.zip") ? 1 : 0
   filename            = "lambda_layer.zip"
   layer_name          = "${var.project_name}-dependencies"
   compatible_runtimes = [var.lambda_runtime]
   description         = "Python dependencies for VacaAgent Lambda functions"
+  source_code_hash    = filebase64sha256("lambda_layer.zip")
 
   lifecycle {
     create_before_destroy = true
@@ -24,7 +26,7 @@ resource "aws_lambda_function" "api" {
   timeout          = var.lambda_timeout
   memory_size      = var.lambda_memory_size
 
-  layers = [aws_lambda_layer_version.dependencies.arn]
+  layers = fileexists("lambda_layer.zip") ? [aws_lambda_layer_version.dependencies[0].arn] : []
 
   vpc_config {
     subnet_ids         = local.private_subnet_ids

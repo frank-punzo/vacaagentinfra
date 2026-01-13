@@ -7,11 +7,13 @@
 
 # VPC Endpoint for Secrets Manager
 # Allows Lambda to retrieve database credentials securely
+# NOTE: If endpoint already exists in VPC, set create_secretsmanager_endpoint to false
 resource "aws_vpc_endpoint" "secretsmanager" {
+  count               = var.create_secretsmanager_endpoint ? 1 : 0
   vpc_id              = local.vpc_id
   service_name        = "com.amazonaws.${var.aws_region}.secretsmanager"
   vpc_endpoint_type   = "Interface"
-  private_dns_enabled = true
+  private_dns_enabled = false  # Set to false to avoid conflicts with existing endpoint
 
   subnet_ids         = local.private_subnet_ids
   security_group_ids = [aws_security_group.vpc_endpoints.id]
@@ -19,6 +21,14 @@ resource "aws_vpc_endpoint" "secretsmanager" {
   tags = {
     Name = "${var.project_name}-secretsmanager-endpoint"
   }
+}
+
+# Data source to look up existing Secrets Manager endpoint if not creating one
+data "aws_vpc_endpoint" "existing_secretsmanager" {
+  count = var.create_secretsmanager_endpoint ? 0 : 1
+
+  vpc_id       = local.vpc_id
+  service_name = "com.amazonaws.${var.aws_region}.secretsmanager"
 }
 
 # VPC Endpoint for S3

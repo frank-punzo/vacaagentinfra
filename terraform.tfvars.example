@@ -26,3 +26,8 @@ db_allocated_storage = 20
 lambda_runtime = "python3.12"
 lambda_memory_size = 512
 lambda_timeout = 30
+
+# VPC Endpoint Configuration
+# Set to true if you need to create a new Secrets Manager endpoint
+# Set to false if one already exists in your VPC (avoids DNS conflict)
+create_secretsmanager_endpoint = false
