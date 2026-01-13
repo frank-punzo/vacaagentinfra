@@ -16,6 +16,7 @@ terraform.rc
 *.zip
 lambda_function/
 lambda_layer/
+placeholder/
 
 # Environment files
 *.env
