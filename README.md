@@ -10,13 +10,14 @@ Terraform infrastructure code for the VacaAgent vacation planning application.
 - **API**: API Gateway (HTTP API)
 - **Authentication**: Amazon Cognito
 - **Storage**: Amazon S3 (vacation photos)
-- **Networking**: VPC with public and private subnets
+- **Networking**: Uses existing VPC (vpc-06afc2c5552066ee1)
 
 ## Prerequisites
 
 1. AWS Account
 2. AWS CLI configured with credentials
 3. Terraform >= 1.0
+4. Existing VPC with subnets (at least 2 private subnets in different AZs)
 
 ## Setup
 
@@ -30,19 +31,48 @@ Download and install Terraform from: https://www.terraform.io/downloads
 aws configure
 ```
 
-### 3. Initialize Terraform
+### 3. Configure VPC and Subnets
+
+Get your subnet IDs from the existing VPC:
+
+```bash
+aws ec2 describe-subnets --filters "Name=vpc-id,Values=vpc-06afc2c5552066ee1" --query "Subnets[*].[SubnetId,AvailabilityZone,Tags[?Key=='Name'].Value|[0],CidrBlock]" --output table
+```
+
+Copy `terraform.tfvars.example` to `terraform.tfvars`:
+
+```bash
+cp terraform.tfvars.example terraform.tfvars
+```
+
+Edit `terraform.tfvars` and replace the subnet IDs with your actual subnet IDs:
+
+```hcl
+vpc_id = "vpc-06afc2c5552066ee1"
+
+# IMPORTANT: Provide at least 2 private subnet IDs in different availability zones
+private_subnet_ids = [
+  "subnet-abc123def456",  # Your private subnet in AZ1
+  "subnet-xyz789ghi012"   # Your private subnet in AZ2
+]
+
+# Optional: Public subnets if needed
+public_subnet_ids = []
+```
+
+### 4. Initialize Terraform
 
 ```bash
 terraform init
 ```
 
-### 4. Review the Plan
+### 5. Review the Plan
 
 ```bash
 terraform plan
 ```
 
-### 5. Deploy Infrastructure
+### 6. Deploy Infrastructure
 
 ```bash
 terraform apply

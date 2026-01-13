@@ -35,6 +35,6 @@ output "s3_photos_bucket" {
 }
 
 output "vpc_id" {
-  description = "VPC ID"
-  value       = aws_vpc.main.id
+  description = "VPC ID (existing)"
+  value       = local.vpc_id
 }

@@ -17,16 +17,22 @@ variable "project_name" {
 }
 
 # VPC Configuration
-variable "vpc_cidr" {
-  description = "CIDR block for VPC"
+variable "vpc_id" {
+  description = "Existing VPC ID to use"
   type        = string
-  default     = "10.0.0.0/16"
+  default     = "vpc-06afc2c5552066ee1"
 }
 
-variable "availability_zones" {
-  description = "Availability zones"
+variable "private_subnet_ids" {
+  description = "List of private subnet IDs in the existing VPC"
   type        = list(string)
-  default     = ["us-east-1a", "us-east-1b"]
+  default     = [] # Must be provided - at least 2 subnets in different AZs for RDS
+}
+
+variable "public_subnet_ids" {
+  description = "List of public subnet IDs in the existing VPC (optional)"
+  type        = list(string)
+  default     = []
 }
 
 # RDS Configuration

@@ -2,7 +2,7 @@
 resource "aws_security_group" "lambda" {
   name_prefix = "${var.project_name}-lambda-sg"
   description = "Security group for Lambda functions"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = local.vpc_id
 
   egress {
     from_port   = 0
@@ -20,7 +20,7 @@ resource "aws_security_group" "lambda" {
 resource "aws_security_group" "rds" {
   name_prefix = "${var.project_name}-rds-sg"
   description = "Security group for RDS instance"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = local.vpc_id
 
   ingress {
     from_port       = 5432
