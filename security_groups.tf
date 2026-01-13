@@ -8,13 +8,13 @@ resource "aws_security_group" "lambda" {
   description = "Security group for Lambda functions"
   vpc_id      = local.vpc_id
 
-  # Outbound to RDS
+  # Outbound to RDS - use VPC CIDR to avoid circular dependency
   egress {
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
-    security_groups = [aws_security_group.rds.id]
-    description     = "PostgreSQL access to RDS"
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = [data.aws_vpc.existing.cidr_block]
+    description = "PostgreSQL access to RDS"
   }
 
   # Outbound HTTPS for AWS services (via VPC endpoints)
