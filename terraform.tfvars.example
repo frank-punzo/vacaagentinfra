@@ -1,0 +1,19 @@
+# AWS Configuration
+aws_region = "us-east-1"
+environment = "dev"
+project_name = "vacaagent"
+
+# VPC Configuration
+vpc_cidr = "10.0.0.0/16"
+availability_zones = ["us-east-1a", "us-east-1b"]
+
+# RDS Configuration
+db_name = "vacaagent"
+db_username = "vacaadmin"
+db_instance_class = "db.t3.micro"
+db_allocated_storage = 20
+
+# Lambda Configuration
+lambda_runtime = "python3.12"
+lambda_memory_size = 512
+lambda_timeout = 30
