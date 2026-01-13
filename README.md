@@ -117,15 +117,42 @@ Use these values to configure your mobile application.
 
 To initialize the database schema, connect to the RDS instance and run the SQL migrations located in `../vacaagent/database/migrations/`.
 
+## Architecture
+
+This infrastructure follows the same pattern as foodfinderinfra:
+
+- **API Gateway (HTTP API)**: PUBLIC - accessible from internet, not in VPC
+- **Lambda Functions**: PRIVATE SUBNETS - in your VPC to access RDS
+- **RDS PostgreSQL**: PRIVATE SUBNETS - only accessible from Lambda
+- **VPC Endpoints**: Allow Lambda to access AWS services WITHOUT NAT Gateway
+  - Secrets Manager endpoint (Interface) - ~$7/month
+  - S3 endpoint (Gateway) - FREE
+
+### Why No NAT Gateway?
+
+Traditional VPC Lambda setups require a NAT Gateway (~$32/month) for internet access. This infrastructure uses **VPC Endpoints** instead, saving ~$25/month while maintaining security:
+
+- Lambda → Secrets Manager (via Interface endpoint)
+- Lambda → S3 (via Gateway endpoint - FREE)
+- Lambda → RDS (direct via security groups)
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed diagrams and explanation.
+
 ## Cost Optimization
 
-This infrastructure is designed to stay within AWS Free Tier limits:
+This infrastructure is designed to minimize costs:
 
-- RDS: db.t3.micro instance, 20GB storage
-- Lambda: 1 million free requests per month
-- API Gateway: 1 million API calls per month
-- S3: 5GB storage, 20,000 GET requests, 2,000 PUT requests per month
-- Cognito: 50,000 MAUs free
+**Monthly Costs**:
+- RDS: FREE (first 12 months) / $12-15 after
+- Lambda: FREE (1M requests included)
+- API Gateway: FREE (first 12 months) / $1 after
+- VPC Endpoint (Secrets Manager): ~$7
+- VPC Endpoint (S3): FREE (Gateway type)
+- S3, Cognito: FREE (within limits)
+
+**Total**: ~$8/month (first 12 months) / ~$26/month after
+
+**vs. NAT Gateway**: Saves ~$25/month by using VPC endpoints
 
 **Note**: Monitor your usage to avoid unexpected charges.
 

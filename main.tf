@@ -1,3 +1,21 @@
+# =============================================================================
+# VacaAgent Infrastructure - AWS Lambda + API Gateway + RDS
+# =============================================================================
+# Architecture Overview:
+# - API Gateway (HTTP API) - PUBLIC, accessible from internet
+# - Lambda Functions - PRIVATE SUBNETS, access RDS and AWS services
+# - RDS PostgreSQL - PRIVATE SUBNETS
+# - VPC Endpoints - Allow Lambda to access AWS services without NAT Gateway
+# - S3 - Photo storage
+# - Cognito - User authentication
+#
+# Network Flow:
+# 1. Mobile App → API Gateway (public, no VPC)
+# 2. API Gateway → Lambda (in private subnets)
+# 3. Lambda → RDS (via security groups)
+# 4. Lambda → AWS Services (via VPC endpoints - no NAT Gateway needed)
+# =============================================================================
+
 terraform {
   required_version = ">= 1.0"
 
@@ -32,6 +50,9 @@ provider "aws" {
   }
 }
 
-# Data sources
+# =============================================================================
+# DATA SOURCES
+# =============================================================================
+
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
