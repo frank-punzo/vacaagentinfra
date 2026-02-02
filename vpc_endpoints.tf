@@ -31,6 +31,39 @@ data "aws_vpc_endpoint" "existing_secretsmanager" {
   service_name = "com.amazonaws.${var.aws_region}.secretsmanager"
 }
 
+# VPC Endpoint for Cognito Identity Provider
+# Allows Lambda to verify JWT tokens from Cognito
+# NOTE: Cognito IdP endpoint only supports specific AZs, using only subnet in us-east-1b
+resource "aws_vpc_endpoint" "cognito_idp" {
+  vpc_id              = local.vpc_id
+  service_name        = "com.amazonaws.${var.aws_region}.cognito-idp"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+  subnet_ids         = ["subnet-0372d9741ca1e7f15"]  # Only us-east-1b supported
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+
+  tags = {
+    Name = "${var.project_name}-cognito-idp-endpoint"
+  }
+}
+
+# VPC Endpoint for Bedrock Runtime
+# Allows Lambda to call Bedrock for AI recommendations
+resource "aws_vpc_endpoint" "bedrock_runtime" {
+  vpc_id              = local.vpc_id
+  service_name        = "com.amazonaws.${var.aws_region}.bedrock-runtime"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+  subnet_ids         = local.private_subnet_ids
+  security_group_ids = [aws_security_group.vpc_endpoints.id]
+
+  tags = {
+    Name = "${var.project_name}-bedrock-runtime-endpoint"
+  }
+}
+
 # VPC Endpoint for S3
 # Allows Lambda to access S3 for photo storage
 resource "aws_vpc_endpoint" "s3" {
@@ -57,6 +90,14 @@ resource "aws_security_group" "vpc_endpoints" {
     protocol        = "tcp"
     security_groups = [aws_security_group.lambda.id]
     description     = "Allow HTTPS from Lambda"
+  }
+
+  ingress {
+    from_port       = 443
+    to_port         = 443
+    protocol        = "tcp"
+    security_groups = ["sg-04e5988ad026079b1"]
+    description     = "Allow HTTPS from Stak Lambda"
   }
 
   egress {

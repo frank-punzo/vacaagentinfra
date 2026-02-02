@@ -49,6 +49,15 @@ resource "aws_security_group" "rds" {
     description     = "Allow PostgreSQL access from Lambda"
   }
 
+  # Allow access from EC2 instance for database administration
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = ["sg-06378ce57d8707d40"]  # allow_ssh_access SG
+    description     = "Allow PostgreSQL access from EC2 admin instance"
+  }
+
   tags = {
     Name = "${var.project_name}-rds-sg"
   }

@@ -76,7 +76,13 @@ variable "lambda_memory_size" {
 variable "lambda_timeout" {
   description = "Lambda timeout in seconds"
   type        = number
-  default     = 30
+  default     = 60
+}
+
+variable "lambda_log_level" {
+  description = "Lambda log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)"
+  type        = string
+  default     = "INFO"
 }
 
 # VPC Endpoint Configuration

@@ -68,6 +68,14 @@ resource "aws_iam_role_policy" "lambda_custom" {
           "cognito-idp:AdminListGroupsForUser"
         ]
         Resource = aws_cognito_user_pool.main.arn
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["bedrock:InvokeModel"]
+        Resource = [
+          "arn:aws:bedrock:*::foundation-model/${var.bedrock_model_id}",
+          "arn:aws:bedrock:us-east-1:*:inference-profile/us.anthropic.claude-3-5-haiku-20241022-v1:0"
+        ]
       }
     ]
   })

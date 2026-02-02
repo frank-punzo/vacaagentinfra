@@ -1,6 +1,6 @@
 # AWS Configuration
 aws_region = "us-east-1"
-environment = "dev"
+environment = "prod"
 project_name = "vacaagent"
 
 # VPC Configuration (using existing VPC)

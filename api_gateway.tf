@@ -59,6 +59,294 @@ resource "aws_apigatewayv2_route" "health" {
   target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 
+# Vacation routes with JWT authorization
+resource "aws_apigatewayv2_route" "get_vacations" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "post_vacations" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "POST /vacations"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "get_vacation_id" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "put_vacation_id" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "PUT /vacations/{id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "delete_vacation_id" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "DELETE /vacations/{id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+# OPTIONS routes for CORS preflight (no auth required)
+resource "aws_apigatewayv2_route" "options_vacations" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "OPTIONS /vacations"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "NONE"
+}
+
+resource "aws_apigatewayv2_route" "options_vacations_id" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "OPTIONS /vacations/{id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "NONE"
+}
+
+# Event routes
+resource "aws_apigatewayv2_route" "get_events" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{vacation_id}/events"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "post_events" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "POST /vacations/{vacation_id}/events"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "put_event" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "PUT /vacations/{vacation_id}/events/{event_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "delete_event" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "DELETE /vacations/{vacation_id}/events/{event_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "get_event_attendees" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{vacation_id}/events/{event_id}/attendees"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "put_event_attendees" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "PUT /vacations/{vacation_id}/events/{event_id}/attendees"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+# Excursion routes
+resource "aws_apigatewayv2_route" "get_excursions" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{vacation_id}/excursions"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "post_excursions" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "POST /vacations/{vacation_id}/excursions"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "put_excursion" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "PUT /vacations/{vacation_id}/excursions/{excursion_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "delete_excursion" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "DELETE /vacations/{vacation_id}/excursions/{excursion_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "get_excursion_attendees" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{vacation_id}/excursions/{excursion_id}/attendees"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "put_excursion_attendees" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "PUT /vacations/{vacation_id}/excursions/{excursion_id}/attendees"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+# Photo routes
+resource "aws_apigatewayv2_route" "get_photos" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{vacation_id}/photos"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "post_photos" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "POST /vacations/{vacation_id}/photos"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "post_photos_upload_url" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "POST /vacations/{vacation_id}/photos/upload-url"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "put_photo" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "PUT /vacations/{vacation_id}/photos/{photo_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "delete_photo" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "DELETE /vacations/{vacation_id}/photos/{photo_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+# Packing list routes
+resource "aws_apigatewayv2_route" "get_packing" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{vacation_id}/packing"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "post_packing" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "POST /vacations/{vacation_id}/packing"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "put_packing_item" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "PUT /vacations/{vacation_id}/packing/{item_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "delete_packing_item" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "DELETE /vacations/{vacation_id}/packing/{item_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+# Member routes
+resource "aws_apigatewayv2_route" "get_members" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{vacation_id}/members"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "delete_member" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "DELETE /vacations/{vacation_id}/members/{member_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+# Invite routes
+resource "aws_apigatewayv2_route" "get_invites" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{vacation_id}/invites"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "post_invites" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "POST /vacations/{vacation_id}/invites"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "delete_invite" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "DELETE /vacations/{vacation_id}/invites/{invite_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+# Join vacation route
+resource "aws_apigatewayv2_route" "post_join" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "POST /join"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+# Recommendations route
+resource "aws_apigatewayv2_route" "get_recommendations" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{vacation_id}/recommendations"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
 # API Gateway Stage
 resource "aws_apigatewayv2_stage" "main" {
   api_id      = aws_apigatewayv2_api.main.id

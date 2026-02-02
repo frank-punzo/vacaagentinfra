@@ -40,6 +40,20 @@ resource "aws_cognito_user_pool" "main" {
     }
   }
 
+  # Custom attribute for age (used for AI recommendations)
+  schema {
+    name                     = "age"
+    attribute_data_type      = "Number"
+    required                 = false
+    mutable                  = true
+    developer_only_attribute = false
+
+    number_attribute_constraints {
+      min_value = "1"
+      max_value = "150"
+    }
+  }
+
   # Account recovery
   account_recovery_setting {
     recovery_mechanism {
@@ -78,8 +92,8 @@ resource "aws_cognito_user_pool_client" "main" {
   generate_secret = false
 
   # Token validity
-  access_token_validity  = 1  # hours
-  id_token_validity      = 1  # hours
+  access_token_validity  = 24 # hours
+  id_token_validity      = 24 # hours
   refresh_token_validity = 30 # days
 
   token_validity_units {
@@ -112,12 +126,14 @@ resource "aws_cognito_user_pool_client" "main" {
     "email",
     "email_verified",
     "name",
-    "sub"
+    "sub",
+    "custom:age"
   ]
 
   write_attributes = [
     "email",
-    "name"
+    "name",
+    "custom:age"
   ]
 }
 
