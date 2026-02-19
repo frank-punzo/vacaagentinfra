@@ -347,6 +347,31 @@ resource "aws_apigatewayv2_route" "get_recommendations" {
   authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
 }
 
+# Saved tips routes
+resource "aws_apigatewayv2_route" "get_saved_tips" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "GET /vacations/{vacation_id}/saved-tips"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "post_saved_tips" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "POST /vacations/{vacation_id}/saved-tips"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "delete_saved_tip" {
+  api_id             = aws_apigatewayv2_api.main.id
+  route_key          = "DELETE /vacations/{vacation_id}/saved-tips/{tip_id}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
 # API Gateway Stage
 resource "aws_apigatewayv2_stage" "main" {
   api_id      = aws_apigatewayv2_api.main.id
