@@ -1,34 +1,51 @@
-# Terraform files
+# Terraform state — never commit
+terraform.tfstate
+terraform.tfstate.backup
 *.tfstate
 *.tfstate.*
 .terraform/
 .terraform.lock.hcl
-crash.log
-crash.*.log
+
+# Secrets — never commit
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Local overrides
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Terraform RC
 .terraformrc
 terraform.rc
 
-# Lambda deployment packages
+# Lambda / build artifacts
 *.zip
-lambda_function/
-lambda_layer/
-placeholder/
-
-# Environment files
-*.env
-.env.*
+*.pyc
+__pycache__/
 
 # IDE
-.vscode/
 .idea/
+.vscode/
 *.swp
 *.swo
-*~
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Lambda deployment packages
+lambda_function/
+lambda_layer/
+placeholder/
